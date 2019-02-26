@@ -1,82 +1,59 @@
 {
-    "name": "drupal-composer/drupal-project",
-    "description": "Project template for Drupal 8 projects with composer",
-    "type": "project",
-    "license": "GPL-2.0-or-later",
-    "authors": [
-        {
-            "name": "",
-            "role": ""
-        }
-    ],
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
-        }
-    ],
-    "require": {
-        "php": ">=5.6",
-        "composer/installers": "^1.2",
-        "cweagans/composer-patches": "^1.6.5",
-        "drupal-composer/drupal-scaffold": "^2.5",
-        "drupal/console": "^1.0.2",
-        "drupal/core": "^8.6.0",
-        "drush/drush": "^9.0.0",
-        "vlucas/phpdotenv": "^2.4",
-        "webflo/drupal-finder": "^1.0.0",
-        "webmozart/path-util": "^2.3",
-        "zaporylie/composer-drupal-optimizations": "^1.0"
+  "name": "acquia/acquia-ra-composer",
+  "description": "Project json for Acquia Remote Administration Composer builds",
+  "type": "project",
+  "license": "proprietary",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
     },
-    "require-dev": {
-        "webflo/drupal-core-require-dev": "^8.6.0"
-    },
-    "conflict": {
-        "drupal/drupal": "*"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "config": {
-        "sort-packages": true
-    },
-    "autoload": {
-        "classmap": [
-            "scripts/composer/ScriptHandler.php"
-        ],
-        "files": ["load.environment.php"]
-    },
-    "scripts": {
-        "pre-install-cmd": [
-            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
-        ],
-        "pre-update-cmd": [
-            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
-        ],
-        "post-install-cmd": [
-            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
-        ],
-        "post-update-cmd": [
-            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
-        ]
-    },
-    "extra": {
-        "composer-exit-on-patch-failure": true,
-        "patchLevel": {
-            "drupal/core": "-p2"
-        },
-        "installer-paths": {
-            "web/core": ["type:drupal-core"],
-            "web/libraries/{$name}": ["type:drupal-library"],
-            "web/modules/contrib/{$name}": ["type:drupal-module"],
-            "web/profiles/contrib/{$name}": ["type:drupal-profile"],
-            "web/themes/contrib/{$name}": ["type:drupal-theme"],
-            "drush/Commands/{$name}": ["type:drupal-drush"]
-        },
-        "drupal-scaffold": {
-            "initial": {
-                ".editorconfig": "../.editorconfig",
-                ".gitattributes": "../.gitattributes"
-            }
-        }
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
     }
+  ],
+  "require": {
+    "composer/installers": "^1.0",
+    "cweagans/composer-patches": "^1.6.0",
+    "drupal-composer/drupal-scaffold": "^2.0.0",
+    "drupal/admin_toolbar": "^1.0",
+    "drupal/core": "^8.3",
+    "drush/drush": "^8.1"
+  },
+  "require-dev": {
+    "drupal/devel": "^1.0",
+    "drupal/stage_file_proxy": "^1.0"
+  },
+  "conflict": {
+    "drupal/core": "7.*"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "extra": {
+    "installer-paths": {
+      "docroot/core": ["type:drupal-core"],
+      "docroot/libraries/{$name}": ["type:drupal-library"],
+      "docroot/modules/contrib/{$name}": ["type:drupal-module"],
+      "docroot/profiles/contrib/{$name}": ["type:drupal-profile"],
+      "docroot/themes/contrib/{$name}": ["type:drupal-theme"]
+    },
+    "enable-patching": true,
+    "patches": {
+      "drupal/[module_name]": {
+        "Note regarding the nature of the patch being applied": "https://www.drupal.org/files/issues/[patch_name].patch"
+      }
+    }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "@composer drupal-scaffold"
+    ],
+    "post-update-cmd": [
+      "@composer drupal-scaffold"
+    ],
+    "drupal-scaffold": [
+      "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
+    ]
+  }
 }
